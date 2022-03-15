@@ -14,6 +14,7 @@ function SearchComponent() {
   const handleChange = async e => {
     const { value } = e.target;
     setText(value);
+    if (value.length===0 || value.trim().length===0) return;
     setLoading(true);
 
     try {
@@ -28,11 +29,15 @@ function SearchComponent() {
         })
       });
 
-      if (res.data.length === 0) return setLoading(false);
+      if (res.data.length === 0) {
+        results.length > 0 && setResults([]);
+
+        return setLoading(false);
+      }
 
       setResults(res.data);
     } catch (error) {
-      alert("Error Searching");
+      console.log('error searching')
     }
 
     setLoading(false);
