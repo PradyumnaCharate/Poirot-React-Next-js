@@ -44,7 +44,7 @@ function Layout({ children, user }) {
                 {
                   //visibility means this component is scrollable
                 }
-                <Visibility context={contextRef}>{children}</Visibility>
+                <Visibility context={contextRef} style={{ paddingTop: "1rem" }}>{children}</Visibility>
               </Grid.Column>
 
               <Grid.Column floated="left" width={4}>
