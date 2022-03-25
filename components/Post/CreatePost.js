@@ -92,6 +92,7 @@ function CreatePost({ user, setPosts }) {
             label="Add Location"
             icon="map marker alternate"
             placeholder="Want to add Location?"
+           
           />
 
           <input

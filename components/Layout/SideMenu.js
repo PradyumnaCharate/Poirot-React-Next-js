@@ -12,13 +12,13 @@ function SideMenu({ user: { unreadNotification, email, unreadMessage, username }
   return (
     <>
       <List
-        style={{ paddingTop: "1rem" }}
+        style={{ paddingTop: "3rem" }}
         size="big"
         verticalAlign="middle"
         selection>
         <Link href="/">
           <List.Item active={isActive("/")}>
-            <Icon name="home" size="large" color={isActive("/") && "teal"} />
+            <Icon name="home" size="mid" color={isActive("/") && "teal"} />
             <List.Content>
               <List.Header content="Home" />
             </List.Content>
@@ -30,7 +30,7 @@ function SideMenu({ user: { unreadNotification, email, unreadMessage, username }
           <List.Item active={isActive("/messages")}>
             <Icon
               name={unreadMessage ? "hand point right" : "mail outline"}
-              size="large"
+              size="mid"
               color={
                 (isActive("/messages") && "teal") || (unreadMessage && "orange")
               }
@@ -46,7 +46,7 @@ function SideMenu({ user: { unreadNotification, email, unreadMessage, username }
           <List.Item active={isActive("/notifications")}>
             <Icon
               name={unreadNotification ? "hand point right" : "bell outline"}
-              size="large"
+              size="mid"
               color={
                 (isActive("/notifications") && "teal") ||
                 (unreadNotification && "orange")
@@ -63,7 +63,7 @@ function SideMenu({ user: { unreadNotification, email, unreadMessage, username }
           <List.Item active={router.query.username === username}>
             <Icon
               name="user"
-              size="large"
+              size="mid"
               color={router.query.username === username && "teal"}
             />
             <List.Content>
@@ -74,7 +74,7 @@ function SideMenu({ user: { unreadNotification, email, unreadMessage, username }
         <br />
 
         <List.Item onClick={() => logoutUser(email)}>
-          <Icon name="log out" size="large" />
+          <Icon name="log out" size="mid" />
           <List.Content>
             <List.Header content="Logout" />
           </List.Content>

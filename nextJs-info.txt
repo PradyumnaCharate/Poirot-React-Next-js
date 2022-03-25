@@ -1,3 +1,7 @@
+
+
+
+
 get-Initial-Props:-
  1.getStaticProps or getServerSideProps instead of getInitialProps. 
  These data fetching methods allow you to have a granular choice between static generation and server-side rendering.
