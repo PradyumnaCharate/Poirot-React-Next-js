@@ -1,6 +1,12 @@
 module.exports = {
-  env: {
-    CLOUDINARY_URL: "https://api.cloudinary.com/v1_1/mern-sherlock/image/upload"
-  }
-};
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+            destination: 'https://https://pradyumna-poirot.netlify.app/:path*',
+      },
+    ]
+  },
+}
+
 
