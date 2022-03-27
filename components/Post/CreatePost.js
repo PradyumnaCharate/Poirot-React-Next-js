@@ -60,6 +60,7 @@ function CreatePost({ user, setPosts }) {
     );
 
     setMedia(null);
+    
     URL.revokeObjectURL(mediaPreview);
     setMediaPreview(null);
     setLoading(false);
