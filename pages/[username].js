@@ -37,7 +37,7 @@ function ProfilePage({
 
   const ownAccount = profile.user._id === user._id;
 
-  if (errorLoading) return <NoProfile />;
+  
 
   useEffect(() => {
     const getPosts = async () => {
@@ -65,6 +65,7 @@ function ProfilePage({
   useEffect(() => {
     showToastr && setTimeout(() => setShowToastr(false), 4000);
   }, [showToastr]);
+  if (errorLoading) return <NoProfile />;
 
   return (
     <>
