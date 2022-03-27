@@ -13,9 +13,10 @@ class MyApp extends App {
     //to exract token cookie
     const { token } = parseCookies(ctx);
     let pageProps = {};
-    //declaring protected route so that only logged in user can access them
-    const protectedRoutes = ctx.pathname === "/" || ctx.pathname === "/[username]" || 
-    ctx.pathname === "/notifications";
+    //declaring protected route so that only logged in uuser can access them
+    const protectedRoutes = ctx.pathname === "/" || 
+    ctx.pathname === "/[username]" || ctx.pathname === "/post/[postId]" ||
+    ctx.pathname === "/notifications" || ctx.pathname === "/messages";
 
     //if token is not there redirect to login 
     if (!token) {

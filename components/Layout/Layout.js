@@ -11,14 +11,17 @@ import {
   Segment
 } from "semantic-ui-react";
 import nprogress from "nprogress";
-import Router from "next/router";
+import Router,{useRouter} from "next/router";
 import SideMenu from "./SideMenu";
 import Search from "./Search";
 
 
 //we have spread pageprops in our app.js and pageprops have user info so receving it here
 function Layout({ children, user }) {
+  const router=useRouter();
   const contextRef = createRef();
+  //this is general layout for entire application. but if its messages page then its layout is different
+  const messagesRoute=router.pathname==="/messages";
 
   //this is progress bar configuration on page changes
   Router.onRouteChangeStart = () => nprogress.start();
@@ -32,28 +35,32 @@ function Layout({ children, user }) {
         <div style={{ marginLeft: "1rem", marginRight: "1rem" }}>
           <Ref innerRef={contextRef}>
             <Grid>
-              <Grid.Column floated="left" width={2}>
-                {//sticky means this column will not be scrollable
-                }
-                <Sticky context={contextRef}>
-                  <SideMenu user={user} />
-                </Sticky>
-              </Grid.Column>
+            {!messagesRoute ? (
+                <>
+                  <Grid.Column floated="left" width={2}>
+                    <Sticky context={contextRef}>
+                      <SideMenu user={user} />
+                    </Sticky>
+                  </Grid.Column>
 
-              <Grid.Column width={10}>
-                {
-                  //visibility means this component is scrollable
-                }
-                <Visibility context={contextRef} style={{ paddingTop: "1rem" }}>{children}</Visibility>
-              </Grid.Column>
+                  <Grid.Column width={10}>
+                    <Visibility context={contextRef}>{children}</Visibility>
+                  </Grid.Column>
 
-              <Grid.Column floated="left" width={4}>
-                <Sticky context={contextRef}>
-                  <Segment basic>
-                    <Search />
-                  </Segment>
-                </Sticky>
-              </Grid.Column>
+                  <Grid.Column floated="left" width={4}>
+                    <Sticky context={contextRef}>
+                      <Segment basic>
+                        <Search />
+                      </Segment>
+                    </Sticky>
+                  </Grid.Column>
+                </>
+              ) : (
+                <>
+                  <Grid.Column floated="left" width={1} />
+                  <Grid.Column width={15}>{children}</Grid.Column>
+                </>
+              )}
             </Grid>
           </Ref>
         </div>

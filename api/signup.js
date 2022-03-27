@@ -3,12 +3,15 @@ const router = express.Router();
 const UserModel = require("../models/UserModel");
 const ProfileModel = require("../models/ProfileModel");
 const FollowerModel = require("../models/FollowerModel");
+const NotificationModel = require("../models/NotificationModel");
+const chatModel=require("../models/ChatModel");
 //to send back token to user
 const jwt = require("jsonwebtoken");
 //to encrypt password
 const bcrypt = require("bcryptjs");
 //validator will validate email
 const isEmail = require("validator/lib/isEmail");
+const ChatModel = require("../models/ChatModel");
 //if user does not provide image then we will use this image.
 const userPng =
   "https://res.cloudinary.com/indersingh/image/upload/v1593464618/App/user_mklcpl.png";
@@ -95,6 +98,9 @@ router.post("/", async (req, res) => {
     await new ProfileModel(profileFields).save();
     //initializing followers and following to empty array 
     await new FollowerModel({ user: user._id, followers: [], following: [] }).save();
+    await new NotificationModel({user: user._id, notifications: []}).save();
+    await new ChatModel({user:user._id,chats:[]}).save();
+
 
     const payload = { userId: user._id };
     jwt.sign(payload, process.env.jwtSecret, { expiresIn: "2d" }, (err, token) => {

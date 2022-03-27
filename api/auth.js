@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const UserModel = require("../models/UserModel");
 const FollowerModel = require("../models/FollowerModel");
+const NotificationModel = require("../models/NotificationModel");
+const ChatModel=require ("../models/ChatModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const isEmail = require("validator/lib/isEmail");
@@ -50,6 +52,14 @@ router.post("/", async (req, res) => {
     if (!isPassword) {
       return res.status(401).send("Invalid Credentials");
     }
+    const chatModel = await ChatModel.findOne({user:user._id})
+    if(!chatModel) {
+      await new ChatModel({user: user._id, chat: []}).save();
+    }
+      const notificationModel = await NotificationModel.findOne({user:user._id})
+    if(!notificationModel) {
+      await new NotificationModel({user: user._id, notifications: []}).save();
+    }
 
     const payload = { userId: user._id };
     jwt.sign(payload, process.env.jwtSecret, { expiresIn: "2d" }, (err, token) => {
@@ -63,3 +73,11 @@ router.post("/", async (req, res) => {
 });
 
 module.exports = router;
+
+
+//if existing user does not have same new Model which we have defined later then we can create that
+//in this way
+//const chatModel = await ChatModel.findOne({user:user._id})
+//if(!chatModel) {
+  //await new ChatModel({user: user._id, chat: []}).save();
+//}

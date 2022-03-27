@@ -11,6 +11,7 @@ import FollowerNotification from "../components/Notifications/FollowerNotificati
 
 function Notifications({ notifications, errorLoading, user, userFollowStats }) {
   const [loggedUserFollowStats, setUserFollowStats] = useState(userFollowStats);
+  console.log(notifications);
 
   useEffect(() => {
     const notificationRead = async () => {
@@ -84,7 +85,6 @@ function Notifications({ notifications, errorLoading, user, userFollowStats }) {
 Notifications.getInitialProps = async ctx => {
   try {
     const { token } = parseCookies(ctx);
-    //get all notifications at start of page only  
 
     const res = await axios.get(`${baseUrl}/api/notifications`, {
       headers: { Authorization: token }

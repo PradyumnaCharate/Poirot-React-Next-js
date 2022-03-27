@@ -6,6 +6,10 @@ const PostModel = require("../models/PostModel");
 const FollowerModel = require("../models/FollowerModel");
 const ProfileModel = require("../models/ProfileModel");
 const bcrypt = require("bcryptjs");
+const {
+  newFollowerNotification,
+  removeFollowerNotification
+} = require("../serverUtils/notificationActions");
 
 // GET PROFILE INFO
 router.get("/:username", authMiddleware, async (req, res) => {
@@ -114,6 +118,8 @@ router.post("/follow/:userToFollowId", authMiddleware, async (req, res) => {
     await userToFollow.followers.unshift({ user: userId });
     await userToFollow.save();
 
+    await newFollowerNotification(userId, userToFollowId);
+
     return res.status(200).send("Updated");
   } catch (error) {
     console.error(error);
@@ -162,6 +168,8 @@ router.put("/unfollow/:userToUnfollowId", authMiddleware, async (req, res) => {
     await userToUnfollow.followers.splice(removeFollower, 1);
     await userToUnfollow.save();
 
+    await removeFollowerNotification(userId, userToUnfollowId);
+
     return res.status(200).send("Updated");
   } catch (error) {
     console.error(error);
@@ -177,7 +185,7 @@ router.post("/update", authMiddleware, async (req, res) => {
     const { bio, facebook, youtube, twitter, instagram, profilePicUrl } = req.body;
 
     let profileFields = {};
-    profileFields.user = userId;
+    profileFields.user = user._id;
 
     profileFields.bio = bio;
 
@@ -213,15 +221,7 @@ router.post("/update", authMiddleware, async (req, res) => {
 // UPDATE PASSWORD
 router.post("/settings/password", authMiddleware, async (req, res) => {
   try {
-    const { currentPassword, newPassword,confirmNewPassword } = req.body;
-    if (newPassword!==confirmNewPassword){
-      return res.status(400).send("Confirm Password field does not match");
-
-    }
-    if (currentPassword===confirmNewPassword){
-      return res.status(400).send("New Password is same as old password");
-
-    }
+    const { currentPassword, newPassword } = req.body;
 
     if (newPassword.length < 6) {
       return res.status(400).send("Password must be atleast 6 characters");
