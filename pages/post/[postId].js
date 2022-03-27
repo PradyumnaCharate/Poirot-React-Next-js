@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { parseCookies } from "nookies";
 import { Card, Icon, Image, Divider, Segment, Container } from "semantic-ui-react";
@@ -67,8 +67,8 @@ function PostPage({ post, errorLoading, user }) {
               name={isLiked ? "heart" : "heart outline"}
               color="red"
               style={{ cursor: "pointer" }}
-              onClick={() =>
-                likePost(post._id, user._id, setLikes, isLiked ? false : true)
+              onClick={async () =>
+                await likePost(post._id, user._id, setLikes, isLiked ? false : true)
               }
             />
 
@@ -98,7 +98,11 @@ function PostPage({ post, errorLoading, user }) {
 
             <Divider hidden />
 
-            <CommentInputField user={user} postId={post._id} setComments={setComments} />
+            <CommentInputField
+              user={user}
+              postId={post._id}
+              setComments={setComments}
+            />
           </Card.Content>
         </Card>
       </Segment>
@@ -107,7 +111,7 @@ function PostPage({ post, errorLoading, user }) {
   );
 }
 
-PostPage.getInitialProps = async ctx => {
+export const getServerSideProps = async ctx => {
   try {
     const { postId } = ctx.query;
     const { token } = parseCookies(ctx);
@@ -116,9 +120,9 @@ PostPage.getInitialProps = async ctx => {
       headers: { Authorization: token }
     });
 
-    return { post: res.data };
+    return { props: { post: res.data } };
   } catch (error) {
-    return { errorLoading: true };
+    return { props: { errorLoading: true } };
   }
 };
 
