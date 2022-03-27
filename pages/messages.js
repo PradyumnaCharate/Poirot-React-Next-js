@@ -210,6 +210,21 @@ function Messages({ chatsData, user }) {
       });
     }
   };
+  useEffect(() => {
+    const messageRead = async () => {
+      try {
+        await axios.post(
+          `${baseUrl}/api/chats`,
+          {},
+          { headers: { Authorization: cookie.get("token") } }
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    messageRead();
+  }, []);
 
   const deleteChat = async messagesWith => {
     try {

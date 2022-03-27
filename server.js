@@ -15,6 +15,7 @@ const {
   setMsgToUnread,
   deleteMsg
 } = require("./serverUtils/messageActions");
+const { likeOrUnlikePost } = require("./serverUtils/likeOrUnlikePost");
 connectDb();
 app.use(express.json());
 const PORT = process.env.PORT || 3000;
@@ -72,6 +73,34 @@ io.on("connection", socket => {
 
     if (success) socket.emit("msgDeleted");
   });
+  socket.on("likePost", async ({ postId, userId, like }) => {
+    const {
+      success,
+      name,
+      profilePicUrl,
+      username,
+      postByUserId,
+      error
+    } = await likeOrUnlikePost(postId, userId, like);
+
+    if (success) {
+      socket.emit("postLiked");
+
+      if (postByUserId !== userId) {
+        const receiverSocket = findConnectedUser(postByUserId);
+
+        if (receiverSocket && like) {
+          // WHEN YOU WANT TO SEND DATA TO ONE PARTICULAR CLIENT
+          io.to(receiverSocket.socketId).emit("newNotificationReceived", {
+            name,
+            profilePicUrl,
+            username,
+            postId
+          });
+        }
+      }
+    }
+  });
 
   socket.on("sendMsgFromNotification", async ({ userId, msgSendToUserId, msg }) => {
     const { newMsg, error } = await sendMsg(userId, msgSendToUserId, msg);
@@ -103,6 +132,7 @@ nextApp.prepare().then(() => {
   app.use("/api/profile",require('./api/profile'));
   app.use("/api/notifications",require("./api/notifications"));
   app.use("/api/chats", require("./api/chats"));
+  app.use("/api/reset", require("./api/reset"));
 
   //because Nextjs pages are created at server (Server side rendering) we must do this
   app.all("*", (req, res) => handle(req, res));

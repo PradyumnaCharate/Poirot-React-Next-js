@@ -6,6 +6,7 @@ import { redirectUser } from "../utils/authUser";
 import Layout from "../components/Layout/Layout";
 import "react-toastify/dist/ReactToastify.css";
 import "semantic-ui-css/semantic.min.css";
+import "cropperjs/dist/cropper.css";
 
 class MyApp extends App {
   //it takes component current page as argument
@@ -16,7 +17,8 @@ class MyApp extends App {
     //declaring protected route so that only logged in uuser can access them
     const protectedRoutes = ctx.pathname === "/" || 
     ctx.pathname === "/[username]" || ctx.pathname === "/post/[postId]" ||
-    ctx.pathname === "/notifications" || ctx.pathname === "/messages";
+    ctx.pathname === "/notifications" || ctx.pathname === "/messages" ||
+    ctx.pathname === "/search";
 
     //if token is not there redirect to login 
     if (!token) {
