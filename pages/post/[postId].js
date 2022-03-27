@@ -12,9 +12,7 @@ import baseUrl from "../../utils/baseUrl";
 import { NoPostFound } from "../../components/Layout/NoData";
 
 function PostPage({ post, errorLoading, user }) {
-  if (errorLoading) {
-    return <NoPostFound />;
-  }
+  
 
   const [likes, setLikes] = useState(post.likes);
 
@@ -22,6 +20,9 @@ function PostPage({ post, errorLoading, user }) {
     likes.length > 0 && likes.filter(like => like.user === user._id).length > 0;
 
   const [comments, setComments] = useState(post.comments);
+  if (errorLoading) {
+    return <NoPostFound />;
+  }
 
   return (
     <Container text>
