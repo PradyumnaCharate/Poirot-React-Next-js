@@ -7,7 +7,12 @@ import axios from "axios";
 import baseUrl from "../../utils/baseUrl";
 import cookie from "js-cookie";
 
-export default ({ user, loggedUserFollowStats, setUserFollowStats, profileUserId,profile}) => {
+const Following = ({
+  user,
+  loggedUserFollowStats,
+  setUserFollowStats,
+  profileUserId
+}) => {
   const [following, setFollowing] = useState([]);
   const [loading, setLoading] = useState(false);
   const [followLoading, setFollowLoading] = useState(false);
@@ -16,9 +21,12 @@ export default ({ user, loggedUserFollowStats, setUserFollowStats, profileUserId
     const getFollowing = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`${baseUrl}/api/profile/following/${profileUserId}`, {
-          headers: { Authorization: cookie.get("token") }
-        });
+        const res = await axios.get(
+          `${baseUrl}/api/profile/following/${profileUserId}`,
+          {
+            headers: { Authorization: cookie.get("token") }
+          }
+        );
 
         setFollowing(res.data);
       } catch (error) {
@@ -40,17 +48,14 @@ export default ({ user, loggedUserFollowStats, setUserFollowStats, profileUserId
 
           const isFollowing =
             loggedUserFollowStats.following.length > 0 &&
-            loggedUserFollowStats.following.filter(
+            loggedUserFollowStats.following.some(
               following => following.user === profileFollowing.user._id
-            ).length > 0;
+            );
 
           return (
             <List key={profileFollowing.user._id} divided verticalAlign="middle">
               <List.Item>
                 <List.Content floated="right">
-                  {
-                    //we are not going to show follow or unfollow button in front of our own name so this condition
-                  }
                   {profileFollowing.user._id !== user._id && (
                     <Button
                       color={isFollowing ? "instagram" : "twitter"}
@@ -78,8 +83,10 @@ export default ({ user, loggedUserFollowStats, setUserFollowStats, profileUserId
           );
         })
       ) : (
-        <NoFollowData followingComponent={true} profileName={profile.user.name}  />
+        <NoFollowData followingComponent={true} />
       )}
     </>
   );
 };
+
+export default Following;
