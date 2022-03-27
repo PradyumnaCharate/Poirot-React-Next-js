@@ -242,9 +242,12 @@ function Messages({ chatsData, user }) {
   return (
     <>
       <Segment padded basic size="large" style={{ marginTop: "5px" }}>
-      <a href="/">
-          <Header icon="home" content="Go Back!" style={{ cursor: "pointer" }} />
-        </a>
+      <Header
+          icon="home"
+          content="Go Back!"
+          onClick={() => router.push("/")}
+          style={{ cursor: "pointer" }}
+        />
         <Divider hidden />
 
         <div style={{ marginBottom: "10px" }}>
