@@ -3,7 +3,7 @@ module.exports = {
     return [
       {
         source: '/api/:path*',
-            destination: 'https://https://pradyumna-poirot.netlify.app/:path*',
+            destination: 'https://pradyumna-poirot.netlify.app/:path*',
       },
     ]
   },
