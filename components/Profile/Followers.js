@@ -6,21 +6,27 @@ import { followUser, unfollowUser } from "../../utils/profileActions";
 import axios from "axios";
 import baseUrl from "../../utils/baseUrl";
 import cookie from "js-cookie";
-import { useRouter } from "next/router";
 
-export default ({ user, loggedUserFollowStats, setUserFollowStats, profileUserId,profile}) => {
+const Followers = ({
+  user,
+  loggedUserFollowStats,
+  setUserFollowStats,
+  profileUserId
+}) => {
   const [followers, setFollowers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [followLoading, setFollowLoading] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
     const getFollowers = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`${baseUrl}/api/profile/followers/${profileUserId}`, {
-          headers: { Authorization: cookie.get("token") }
-        });
+        const res = await axios.get(
+          `${baseUrl}/api/profile/followers/${profileUserId}`,
+          {
+            headers: { Authorization: cookie.get("token") }
+          }
+        );
 
         setFollowers(res.data);
       } catch (error) {
@@ -42,9 +48,9 @@ export default ({ user, loggedUserFollowStats, setUserFollowStats, profileUserId
 
           const isFollowing =
             loggedUserFollowStats.following.length > 0 &&
-            loggedUserFollowStats.following.filter(
+            loggedUserFollowStats.following.some(
               following => following.user === profileFollower.user._id
-            ).length > 0;
+            );
 
           return (
             <List key={profileFollower.user._id} divided verticalAlign="middle">
@@ -77,8 +83,10 @@ export default ({ user, loggedUserFollowStats, setUserFollowStats, profileUserId
           );
         })
       ) : (
-        <NoFollowData followersComponent={true} profileName={profile.user.name}/>
+        <NoFollowData followersComponent={true} />
       )}
     </>
   );
 };
+
+export default Followers;
