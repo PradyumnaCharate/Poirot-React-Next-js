@@ -8,9 +8,11 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const isEmail = require("validator/lib/isEmail");
 const authMiddleware = require("../middleware/authMiddleware");
+const cors = require('./cors');
+.options(cors.corsWithOptions, (req, res) => { res.sendStatus(200); })
 
 //To verify header in request and send follow stats back
-router.get("/", authMiddleware, async (req, res) => {
+router.get("/",cors.corsWithOptions authMiddleware, async (req, res) => {
   const { userId } = req; 
 
   try {
@@ -27,7 +29,7 @@ router.get("/", authMiddleware, async (req, res) => {
 
 
 //To validate login request
-router.post("/", async (req, res) => {
+router.post("/",cors.corsWithOptions async (req, res) => {
   const { email, password } = req.body.user;
 
   if (!isEmail(email)) return res.status(401).send("Invalid Email");
