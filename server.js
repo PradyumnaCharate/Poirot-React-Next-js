@@ -140,7 +140,7 @@ nextApp.prepare().then(() => {
    
 
   server.listen(PORT, err => {
-    if (err) throw err;
+    if (err) alert(err);
     console.log("Express server running");
   });
 });
